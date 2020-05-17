@@ -60,7 +60,7 @@ const Home = () => {
       {JSON.stringify(posts)}
       <button onClick={updateUsername}>login</button>
       <hr></hr>
-      {JSON.stringify(history)}
+      {JSON.stringify(state.user)}
     </div>
   );
 };
