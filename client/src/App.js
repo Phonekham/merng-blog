@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { ToastContainer } from "react-toastify";
 
 import Home from "./pages/Home";
 import Nav from "./components/Nav";
@@ -16,6 +17,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <Nav />
+      <ToastContainer></ToastContainer>
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/register" component={Register} />
