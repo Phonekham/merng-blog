@@ -20,7 +20,6 @@ const Home = () => {
   const [fetchPosts, { data: posts }] = useLazyQuery(GET_ALL_POSTS);
 
   const { state, dispatch } = useContext(AuthContext);
-  console.log(state.user);
 
   let history = useHistory();
 

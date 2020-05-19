@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
     });
     // cleanup
     return () => unsubscribe();
-  });
+  }, []);
 
   const value = { state, dispatch };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
