@@ -1,12 +1,17 @@
-let authorized = true;
+var admin = require("firebase-admin");
+var serviceAccount = require("../config/fbServiceAccountKey.json");
 
-exports.authCheck = (req, res, next = (f) => f) => {
-  if (!req.headers.authtoken) throw new Error("unauthorized");
-  //   token valid check
-  const valid = req.headers.authtoken === "secret";
-  if (!valid) {
-    throw new Error("unauthorized");
-  } else {
-    next();
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  //   databaseURL: "https://merng-blog.firebaseio.com",
+});
+exports.authCheck = async (req) => {
+  try {
+    const currentUser = await admin.auth().verifyIdToken(req.headers.authtoken);
+    console.log("current user", currentUser);
+    return currentUser;
+  } catch (error) {
+    console.log("auth check error", error);
+    throw new Error("invalid or expired token");
   }
 };
