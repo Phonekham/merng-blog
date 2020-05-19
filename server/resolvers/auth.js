@@ -1,6 +1,11 @@
 const { gql } = require("apollo-server-express");
 
-const me = () => "Ryan";
+const { authCheck } = require("../helpers/auth");
+
+const me = (parent, args, { req, res }) => {
+  authCheck(req, res);
+  return "phone";
+};
 
 module.exports = {
   Query: {

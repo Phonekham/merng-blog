@@ -9,6 +9,8 @@ const {
   mergeResolvers,
 } = require("merge-graphql-schemas");
 
+const { authCheck } = require("./helpers/auth");
+
 require("dotenv").config();
 
 const app = express();
@@ -40,6 +42,7 @@ const resolvers = mergeResolvers(
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req, res }) => ({ req, res }),
 });
 
 // applyMiddleware method connects ApolloServer to a specific HTTP framework ie: express
