@@ -21,6 +21,7 @@
     "firebase-admin": "^8.12.1",
     "graphql": "^15.0.0",
     "merge-graphql-schemas": "^1.7.7",
-    "mongoose": "^5.9.7"
+    "mongoose": "^5.9.7",
+    "shortid": "^2.2.15"
   }
 }
