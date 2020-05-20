@@ -6,6 +6,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
 import { AuthContext } from "../../context/authContext";
+import AuthForm from "../../components/forms/AuthForm";
 
 const USER_CREATE = gql`
   mutation userCreate {
@@ -71,36 +72,15 @@ const CompleteRegistration = () => {
       ) : (
         <h4>Complete your registration</h4>
       )}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="form-control"
-            placeholder="Enter email"
-            disabled
-          ></input>
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="form-control"
-            placeholder="Enter Password"
-            disabled={loading}
-          ></input>
-        </div>
-        <button
-          className="btn btn-raised btn-primary"
-          disabled={!email || loading}
-        >
-          Submit
-        </button>
-      </form>
+      <AuthForm
+        email={email}
+        loading={loading}
+        password={password}
+        setPassword={setPassword}
+        setEmail={setEmail}
+        handleSubmit={handleSubmit}
+        showPasswordInput="true"
+      ></AuthForm>
     </div>
   );
 };

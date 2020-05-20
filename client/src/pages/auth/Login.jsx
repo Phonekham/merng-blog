@@ -6,6 +6,7 @@ import { gql } from "apollo-boost";
 
 import { auth, googleAuthProvider } from "../../firebase";
 import { AuthContext } from "../../context/authContext";
+import AuthForm from "../../components/forms/AuthForm";
 
 const USER_CREATE = gql`
   mutation userCreate {
@@ -75,36 +76,15 @@ const Login = () => {
       <button className="btn btn-raised btn-danger mt-5" onClick={googleLogin}>
         Login with Google
       </button>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="form-control"
-            placeholder="Enter email"
-            disabled={loading}
-          ></input>
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="form-control"
-            placeholder="Enter Password"
-            disabled={loading}
-          ></input>
-        </div>
-        <button
-          className="btn btn-raised btn-primary"
-          disabled={!email || !password || loading}
-        >
-          Submit
-        </button>
-      </form>
+      <AuthForm
+        email={email}
+        loading={loading}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        handleSubmit={handleSubmit}
+        showPasswordInput="true"
+      ></AuthForm>
     </div>
   );
 };
