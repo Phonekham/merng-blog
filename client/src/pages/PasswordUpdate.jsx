@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-import firebase from "../firebase";
+import { auth } from "../firebase";
 import AuthForm from "../components/forms/AuthForm";
 
 const PasswordUpdate = () => {
@@ -10,6 +10,16 @@ const PasswordUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    await auth.currentUser
+      .updatePassword(password)
+      .then(() => {
+        setLoading(false);
+        toast.success("password updated");
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error(error.message);
+      });
   };
 
   return (
