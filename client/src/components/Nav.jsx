@@ -39,11 +39,18 @@ const Nav = () => {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           {user ? (
-            <li className="nav-item">
-              <a onClick={logout} className="nav-link nav-item" href="/login">
-                Logout
-              </a>
-            </li>
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="/profile">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a onClick={logout} className="nav-link nav-item" href="/login">
+                  Logout
+                </a>
+              </li>
+            </>
           ) : (
             <>
               <li className="nav-item active">
