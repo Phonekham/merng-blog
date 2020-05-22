@@ -10,6 +10,8 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import CompleteRegistration from "./pages/auth/CompleteRegistration";
 import { AuthContext } from "./context/authContext";
+import PrivateRoute from "./components/PrivateRoute";
+import PasswordForgot from "./pages/PasswordForgot";
 
 const App = () => {
   const { state } = useContext(AuthContext);
@@ -38,6 +40,11 @@ const App = () => {
           exact
           path="/complete-registration"
           component={CompleteRegistration}
+        />
+        <PrivateRoute
+          exact
+          path="/password/forgot"
+          component={PasswordForgot}
         />
       </Switch>
     </ApolloProvider>

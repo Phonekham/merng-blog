@@ -13,7 +13,7 @@ const PrivateRoute = ({ children, ...rest }) => {
     }
   }, [state.user]);
 
-  const navLinks = () => {
+  const navLinks = () => (
     <nav>
       <ul className="nav flex-column">
         <li className="nav-item">
@@ -32,10 +32,10 @@ const PrivateRoute = ({ children, ...rest }) => {
           </Link>
         </li>
       </ul>
-    </nav>;
-  };
+    </nav>
+  );
 
-  const renderContent = () => {
+  const renderContent = () => (
     <div className="container-fluid pt-5">
       <div className="row">
         <div className="col-md-4">{navLinks()}</div>
@@ -43,8 +43,8 @@ const PrivateRoute = ({ children, ...rest }) => {
           <Route {...rest}></Route>
         </div>
       </div>
-    </div>;
-  };
+    </div>
+  );
 
   return user ? renderContent() : <h4>...loading</h4>;
 };
