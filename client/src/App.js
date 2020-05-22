@@ -12,6 +12,7 @@ import CompleteRegistration from "./pages/auth/CompleteRegistration";
 import { AuthContext } from "./context/authContext";
 import PrivateRoute from "./components/PrivateRoute";
 import PasswordUpdate from "./pages/PasswordUpdate";
+import PasswordForgot from "./pages/PasswordForgot";
 import Profile from "./pages/auth/Profile";
 import Post from "./pages/post/Post";
 
@@ -43,6 +44,7 @@ const App = () => {
           path="/complete-registration"
           component={CompleteRegistration}
         />
+        <Route path="/password/forgot" component={PasswordForgot} />
         <PrivateRoute
           exact
           path="/password/update"

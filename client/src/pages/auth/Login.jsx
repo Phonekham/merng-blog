@@ -85,6 +85,9 @@ const Login = () => {
         handleSubmit={handleSubmit}
         showPasswordInput="true"
       ></AuthForm>
+      <Link className="text-danger float-right" to="/password/forgot">
+        Forgot Password
+      </Link>
     </div>
   );
 };
