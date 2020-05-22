@@ -42,7 +42,7 @@ const Nav = () => {
             <>
               <li className="nav-item">
                 <Link className="nav-link" to="/profile">
-                  Profile
+                  {user && user.email.split("@")[0]}
                 </Link>
               </li>
               <li className="nav-item">
