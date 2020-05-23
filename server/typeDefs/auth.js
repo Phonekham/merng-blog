@@ -1,6 +1,9 @@
 const { gql } = require("apollo-server-express");
 
 module.exports = gql`
+  # scalar types
+  scalar DateTime
+
   type Query {
     profile: User!
   }
@@ -17,7 +20,7 @@ module.exports = gql`
     email: String
     images: [Image]
     about: String
-    createdAt: String
+    createdAt: DateTime
   }
 
   type UserCreateResponse {
