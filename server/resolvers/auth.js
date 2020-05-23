@@ -4,9 +4,9 @@ const shortid = require("shortid");
 const { authCheck } = require("../helpers/auth");
 const User = require("../models/user");
 
-const me = async (parent, args, { req, res }) => {
-  await authCheck(req, res);
-  return "phone";
+const profile = async (parent, args, { req, res }) => {
+  const currentUser = await authCheck(req);
+  return await User.findOne({ email: currentUser.email }).exec();
 };
 
 const userCreate = async (parent, args, { req }) => {
@@ -34,7 +34,7 @@ const userUpdate = async (parent, args, { req }) => {
 
 module.exports = {
   Query: {
-    me,
+    profile,
   },
   Mutation: {
     userCreate,
