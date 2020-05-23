@@ -21,6 +21,7 @@ module.exports = gql`
     images: [Image]
     about: String
     createdAt: DateTime
+    updatedAt: DateTime
   }
 
   type UserCreateResponse {
