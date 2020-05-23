@@ -3,19 +3,10 @@ import { auth } from "../../firebase";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
 
 import { AuthContext } from "../../context/authContext";
 import AuthForm from "../../components/forms/AuthForm";
-
-const USER_CREATE = gql`
-  mutation userCreate {
-    userCreate {
-      username
-      email
-    }
-  }
-`;
+import { USER_CREATE } from "../../graphql/mutations";
 
 const CompleteRegistration = () => {
   const { dispatch } = useContext(AuthContext);
