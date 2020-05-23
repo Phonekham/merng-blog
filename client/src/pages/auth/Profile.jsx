@@ -4,39 +4,38 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import omitDeep from "omit-deep";
 
+const USER_INFO = gql`
+  fragment userInfo on User {
+    _id
+    name
+    username
+    email
+    images {
+      url
+      public_id
+    }
+    about
+    createdAt
+    updatedAt
+  }
+`;
+
 const PROFILE = gql`
   query {
     profile {
-      _id
-      name
-      username
-      email
-      images {
-        url
-        public_id
-      }
-      about
-      createdAt
-      updatedAt
+      ...userInfo
     }
   }
+  ${USER_INFO}
 `;
 
 const USER_UPDATE = gql`
   mutation userUpdate($input: UserUpdateInput!) {
     userUpdate(input: $input) {
-      _id
-      username
-      name
-      email
-      images {
-        url
-      }
-      about
-      createdAt
-      updatedAt
+      ...userInfo
     }
   }
+  ${USER_INFO}
 `;
 
 const Profile = () => {
