@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import { useMemo } from "react";
+import omitDeep from "omit-deep";
 
 const PROFILE = gql`
   query {
@@ -14,6 +14,23 @@ const PROFILE = gql`
       images {
         url
         public_id
+      }
+      about
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const USER_UPDATE = gql`
+  mutation userUpdate($input: UserUpdateInput!) {
+    userUpdate(input: $input) {
+      _id
+      username
+      name
+      email
+      images {
+        url
       }
       about
       createdAt
@@ -38,21 +55,37 @@ const Profile = () => {
     if (data) {
       console.log(data.profile);
       setValues({
+        ...values,
         username: data.profile.username,
         name: data.profile.name,
         email: data.profile.email,
         about: data.profile.about,
-        images: data.profile.images,
+        images: omitDeep(data.profile.images, ["__typename"]),
       });
     }
   }, [data]);
 
+  // mutation
+  const [userUpdate] = useMutation(USER_UPDATE, {
+    update: ({ data }) => {
+      console.log("user mutation in profile", data);
+      toast.success("profile updated");
+    },
+  });
+
   // destructure
   const { username, name, about, email } = values;
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    userUpdate({ variables: { input: values } });
+    setLoading(false);
+  };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
 
   const handleImageChange = () => {};
 
@@ -108,7 +141,7 @@ const Profile = () => {
         <label htmlFor="">about</label>
         <textarea
           name="about"
-          value={username}
+          value={about}
           onChange={handleChange}
           className="form-control"
           placeholder="about"
