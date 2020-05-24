@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import omitDeep from "omit-deep";
+import Resizer from "react-image-file-resizer";
 
 import { USER_UPDATE } from "../../graphql/mutations";
 import { PROFILE } from "../../graphql/queries";
@@ -54,7 +55,26 @@ const Profile = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = () => {};
+  const fileResizeAndUpload = (event) => {
+    let fileInput = false;
+    if (event.target.files[0]) {
+      fileInput = true;
+    }
+    if (fileInput) {
+      Resizer.imageFileResizer(
+        event.target.files[0],
+        300,
+        300,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          console.log(uri);
+        },
+        "base64"
+      );
+    }
+  };
 
   const profileUpdateForm = () => (
     <form onSubmit={handleSubmit}>
@@ -99,7 +119,7 @@ const Profile = () => {
         <input
           type="file"
           accept="image/*"
-          onChange={handleImageChange}
+          onChange={fileResizeAndUpload}
           className="form-control"
           placeholder="image"
         />
