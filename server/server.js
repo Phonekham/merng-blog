@@ -12,7 +12,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
 
-const { authCheck } = require("./helpers/auth");
+const { authCheckMiddleware } = require("./helpers/auth");
 
 require("dotenv").config();
 
@@ -61,7 +61,8 @@ apolloServer.applyMiddleware({ app });
 const httpserver = http.createServer(app);
 
 // Rest Endpoint
-app.post("/uploadimages", (req, res) => {
+// upload image
+app.post("/uploadimages", authCheckMiddleware, (req, res) => {
   cloudinary.uploader.upload(
     req.body.image,
     (result) => {
@@ -75,6 +76,15 @@ app.post("/uploadimages", (req, res) => {
       resource_type: "auto",
     }
   );
+});
+
+// remove image
+app.post("/removeimage", authCheckMiddleware, (req, res) => {
+  let image_id = req.body.public_id;
+  cloudinary.uploader.destroy(image_id, (error, result) => {
+    if (error) return res.json({ success: false, error });
+    res.send("ok");
+  });
 });
 
 app.listen(process.env.PORT, () => {
