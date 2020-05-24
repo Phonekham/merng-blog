@@ -1,13 +1,16 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import { toast } from "react-toastify";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import omitDeep from "omit-deep";
 import Resizer from "react-image-file-resizer";
+import axios from "axios";
 
 import { USER_UPDATE } from "../../graphql/mutations";
 import { PROFILE } from "../../graphql/queries";
+import { AuthContext } from "../../context/authContext";
 
 const Profile = () => {
+  const { state } = useContext(AuthContext);
   const [values, setValues] = useState({
     username: "",
     name: "",
@@ -42,7 +45,7 @@ const Profile = () => {
   });
 
   // destructure
-  const { username, name, about, email } = values;
+  const { username, name, about, email, images } = values;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,7 +72,26 @@ const Profile = () => {
         100,
         0,
         (uri) => {
-          console.log(uri);
+          // console.log(uri);
+          axios
+            .post(
+              `${process.env.REACT_APP_REST_ENDPOINT}/uploadimages`,
+              { image: uri },
+              {
+                headers: {
+                  authtoken: state.user.token,
+                },
+              }
+            )
+            .then((response) => {
+              setLoading(false);
+              console.log("image uploaded", response);
+              setValues({ ...values, images: [...images, response.data] });
+            })
+            .catch((error) => {
+              setLoading(false);
+              console.log("cloudinary upload failed", error);
+            });
         },
         "base64"
       );
