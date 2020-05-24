@@ -8,6 +8,9 @@ const {
   mergeTypes,
   mergeResolvers,
 } = require("merge-graphql-schemas");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const cloudinary = require("cloudinary");
 
 const { authCheck } = require("./helpers/auth");
 
@@ -31,6 +34,11 @@ const db = async () => {
 };
 // execute database connection
 db();
+
+// Middlewares
+app.use(cors());
+app.use(bodyParser.json({ limit: "5mb" }));
+
 // typeDefs
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, "./typeDefs")));
 // resolvers
@@ -51,6 +59,23 @@ apolloServer.applyMiddleware({ app });
 
 // server
 const httpserver = http.createServer(app);
+
+// Rest Endpoint
+app.post("/uploadimages", (req, res) => {
+  cloudinary.uploader.upload(
+    req.body.image,
+    (result) => {
+      res.send({
+        url: result.url,
+        public_id: result.public_id,
+      });
+    },
+    {
+      public_id: `${Date.now()}`,
+      resource_type: "auto",
+    }
+  );
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
