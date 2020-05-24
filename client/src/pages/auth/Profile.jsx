@@ -16,7 +16,7 @@ const Profile = () => {
     name: "",
     email: "",
     about: "",
-    images: "",
+    images: [],
   });
   const [loading, setLoading] = useState(false);
 
@@ -136,16 +136,7 @@ const Profile = () => {
           disabled={loading}
         />
       </div>
-      <div className="form-group">
-        <label htmlFor="">image</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={fileResizeAndUpload}
-          className="form-control"
-          placeholder="image"
-        />
-      </div>
+
       <div className="form-group">
         <label htmlFor="">about</label>
         <textarea
@@ -167,7 +158,39 @@ const Profile = () => {
     </form>
   );
 
-  return <div className="container p-5">{profileUpdateForm()}</div>;
+  return (
+    <div className="container p-5">
+      <div className="row">
+        <div className="col-md-3">
+          <div className="form-group">
+            <label className="btn btn-primary">
+              Upload Image
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                onChange={fileResizeAndUpload}
+                className="form-control"
+                placeholder="image"
+              />
+            </label>
+          </div>
+        </div>
+        <div className="col-md-9">
+          {images.map((image) => (
+            <img
+              src={image.url}
+              key={image.public_id}
+              alt={image.public_id}
+              style={{ height: "100px" }}
+              className="float-right"
+            ></img>
+          ))}
+        </div>
+        {profileUpdateForm()}
+      </div>
+    </div>
+  );
 };
 
 export default Profile;
