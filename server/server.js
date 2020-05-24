@@ -61,6 +61,14 @@ apolloServer.applyMiddleware({ app });
 const httpserver = http.createServer(app);
 
 // Rest Endpoint
+
+// cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 // upload image
 app.post("/uploadimages", authCheckMiddleware, (req, res) => {
   cloudinary.uploader.upload(
