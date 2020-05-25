@@ -16,6 +16,7 @@ import PasswordForgot from "./pages/PasswordForgot";
 import Profile from "./pages/auth/Profile";
 import Post from "./pages/post/Post";
 import PublicRoute from "./components/PublicRoute";
+import Users from "./pages/Users";
 
 const App = () => {
   const { state } = useContext(AuthContext);
@@ -38,6 +39,7 @@ const App = () => {
       <ToastContainer></ToastContainer>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/users" component={Users} />
         <PublicRoute exact path="/register" component={Register} />
         <PublicRoute exact path="/login" component={Login} />
         <Route

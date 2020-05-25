@@ -19,3 +19,12 @@ export const GET_ALL_POSTS = gql`
     }
   }
 `;
+
+export const GET_ALL_USERS = gql`
+  {
+    allUsers {
+      ...userInfo
+    }
+  }
+  ${USER_INFO}
+`;
