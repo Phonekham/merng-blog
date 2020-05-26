@@ -1,11 +1,21 @@
-const { gql } = require("apollo-server-express");
-const { posts } = require("../temp");
 const { authCheck } = require("../helpers/auth");
 const User = require("../models/user");
 const Post = require("../models/post");
 
 // queries
-const totalPosts = () => posts.length;
+const allPosts = async (parent, args, { req }) => {
+  return await Post.find({}).exec();
+};
+const postByUser = async (parent, args, { req }) => {
+  const currentUser = await authCheck(req);
+  const currentUserFromDB = await User.findOne({
+    email: currentUser.email,
+  }).exec();
+  return await Post.find({ postedBy: currentUserFromDB })
+    .populate("postedBy", "_id username")
+    .sort({ createdAt: -1 });
+};
+
 // mutation
 const postCreate = async (parent, args, { req }) => {
   const currentUser = await authCheck(req);
@@ -26,7 +36,7 @@ const postCreate = async (parent, args, { req }) => {
 };
 
 module.exports = {
-  Query: { totalPosts },
+  Query: { allPosts, postByUser },
   Mutation: {
     postCreate,
   },

@@ -9,7 +9,8 @@ module.exports = gql`
   }
 
   type Query {
-    totalPosts: Int!
+    allPosts: [Post!]!
+    postByUser: [Post!]!
   }
   # input type
   input PostCreateInput {
