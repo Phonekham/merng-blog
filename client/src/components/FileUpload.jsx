@@ -5,9 +5,15 @@ import axios from "axios";
 import { AuthContext } from "../context/authContext";
 import Image from "./Image";
 
-const FileUpload = ({ setValues, setLoading, values, loading }) => {
+const FileUpload = ({
+  setValues,
+  setLoading,
+  values,
+  loading,
+  singleUpload = false,
+}) => {
   const { state } = useContext(AuthContext);
-  const { images } = values;
+  const { images, image } = values;
 
   const fileResizeAndUpload = (event) => {
     setLoading(true);
@@ -38,7 +44,11 @@ const FileUpload = ({ setValues, setLoading, values, loading }) => {
             .then((response) => {
               setLoading(false);
               console.log("image uploaded", response);
-              setValues({ ...values, images: [...images, response.data] });
+              if (singleUpload) {
+                setValues({ ...values, image: response.data });
+              } else {
+                setValues({ ...values, images: [...images, response.data] });
+              }
             })
             .catch((error) => {
               setLoading(false);
@@ -66,10 +76,14 @@ const FileUpload = ({ setValues, setLoading, values, loading }) => {
       )
       .then((response) => {
         setLoading(false);
-        let filteredImages = images.filter((item) => {
-          return item.public_id !== id;
-        });
-        setValues({ ...values, images: filteredImages });
+        if (singleUpload) {
+          setValues({ ...values, image: { url: "", public_id: "" } });
+        } else {
+          let filteredImages = images.filter((item) => {
+            return item.public_id !== id;
+          });
+          setValues({ ...values, images: filteredImages });
+        }
       })
       .catch((error) => console.log(error));
   };
@@ -91,13 +105,21 @@ const FileUpload = ({ setValues, setLoading, values, loading }) => {
         </div>
       </div>
       <div className="col-md-9">
-        {images.map((image) => (
+        {image && (
           <Image
             key={image.public_id}
             image={image}
             handleImageRemove={handleImageRemove}
           ></Image>
-        ))}
+        )}
+        {images &&
+          images.map((image) => (
+            <Image
+              key={image.public_id}
+              image={image}
+              handleImageRemove={handleImageRemove}
+            ></Image>
+          ))}
       </div>
     </div>
   );

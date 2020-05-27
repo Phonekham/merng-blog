@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import omitDeep from "omit-deep";
 
 import { AuthContext } from "../../context/authContext";
+import FileUpload from "../../components/FileUpload";
 
 const initialState = {
   content: "",
@@ -52,8 +53,18 @@ const Post = () => {
   return (
     <div className="container p-5">
       {loading ? <h4 className="text-danger">Loading</h4> : <h4>Create</h4>}
-      {createForm()}
-      {JSON.stringify(content)}
+
+      <FileUpload
+        values={values}
+        loading={loading}
+        setLoading={setLoading}
+        setValues={setValues}
+        singleUpload={true}
+      ></FileUpload>
+
+      <div className="row">
+        <div className="col">{createForm()}</div>
+      </div>
     </div>
   );
 };
