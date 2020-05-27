@@ -5,7 +5,10 @@ import omitDeep from "omit-deep";
 
 import { AuthContext } from "../../context/authContext";
 import FileUpload from "../../components/FileUpload";
+import PostCard from "../../components/PostCard";
+
 import { POST_CREATE } from "../../graphql/mutations";
+import { POSTS_BY_USER } from "../../graphql/queries";
 
 const initialState = {
   content: "",
@@ -18,6 +21,8 @@ const initialState = {
 const Post = () => {
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
+
+  const { data: posts } = useQuery(POSTS_BY_USER);
 
   const [postCreate] = useMutation(POST_CREATE, {
     // update cache
@@ -79,7 +84,16 @@ const Post = () => {
       <div className="row">
         <div className="col">{createForm()}</div>
       </div>
-      {JSON.stringify(values.image)}
+      <hr></hr>
+      <div className="row p-5">
+        {posts &&
+          posts.postByUser.map((post) => (
+            <div className="col-md-6 pt-5" key={post._id}>
+              <PostCard post={post}></PostCard>
+            </div>
+          ))}
+      </div>
+      {JSON.stringify(posts)}
     </div>
   );
 };

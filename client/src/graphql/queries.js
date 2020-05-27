@@ -28,6 +28,15 @@ export const GET_ALL_USERS = gql`
   ${USER_INFO}
 `;
 
+export const POSTS_BY_USER = gql`
+  {
+    postByUser {
+      ...postData
+    }
+  }
+  ${POST_DATA}
+`;
+
 // export const GET_ALL_USERS = gql`
 //   query publicProfile($username:String! ){
 //     publicProfile(username: $username) {
