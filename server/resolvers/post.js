@@ -4,7 +4,7 @@ const Post = require("../models/post");
 
 // queries
 const allPosts = async (parent, args, { req }) => {
-  return await Post.find({}).exec();
+  return await Post.find({}).populate("postedBy", "username _id").exec();
 };
 const postByUser = async (parent, args, { req }) => {
   const currentUser = await authCheck(req);
