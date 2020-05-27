@@ -5,6 +5,7 @@ import omitDeep from "omit-deep";
 
 import { AuthContext } from "../../context/authContext";
 import FileUpload from "../../components/FileUpload";
+import { POST_CREATE } from "../../graphql/mutations";
 
 const initialState = {
   content: "",
@@ -18,7 +19,20 @@ const Post = () => {
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {};
+  const [postCreate] = useMutation(POST_CREATE, {
+    // update cache
+    update: (data) => console.log(data),
+    onError: (err) => console.log(err),
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    postCreate({ variables: { input: values } });
+    setValues(initialState);
+    setLoading(false);
+    toast.success("Post created");
+  };
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -65,6 +79,7 @@ const Post = () => {
       <div className="row">
         <div className="col">{createForm()}</div>
       </div>
+      {JSON.stringify(values.image)}
     </div>
   );
 };
