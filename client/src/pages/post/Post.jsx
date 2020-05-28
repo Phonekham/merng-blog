@@ -26,7 +26,19 @@ const Post = () => {
 
   const [postCreate] = useMutation(POST_CREATE, {
     // update cache
-    update: (data) => console.log(data),
+    update: (cache, { data: { postCreate } }) => {
+      // query from cache
+      const { postByUser } = cache.readQuery({
+        query: POSTS_BY_USER,
+      });
+      // Write query to cache
+      cache.writeQuery({
+        query: POSTS_BY_USER,
+        data: {
+          postByUser: [postCreate, ...postByUser],
+        },
+      });
+    },
     onError: (err) => console.log(err),
   });
 
