@@ -38,9 +38,43 @@ const postCreate = async (parent, args, { req }) => {
   return newPost;
 };
 
+const postUpdate = async (parent, args, { req }) => {
+  const currentUser = await authCheck(req);
+  // validation
+  if (args.input.content.trim() === "") throw new Error("Content is required");
+  // get current user from db
+  const currentUserFromDB = await User.findOne({
+    email: currentUser.email,
+  }).exec();
+  // id of post to update
+  const postToUpdate = await Post.findById({ _id: args.input._id }).exec();
+  if (currentUserFromDB._id.toString() !== postToUpdate.postedBy._id.toString())
+    throw new Error("not authorized");
+  const updatedPost = await Post.findByIdAndUpdate(
+    args.input._id,
+    { ...args.input },
+    { new: true }
+  ).exec();
+  return updatedPost;
+};
+
+const postDelete = async (parent, args, { req }) => {
+  const currentUser = await authCheck(req);
+  const currentUserFromDB = await User.findOne({
+    email: currentUser.email,
+  }).exec();
+  const postToDelete = await Post.findById({ _id: args.postId }).exec();
+  if (currentUserFromDB._id.toString() !== postToDelete.postedBy._id.toString())
+    throw new Error("not authorized");
+  const deletedPost = await Post.findByIdAndDelete({ _id: args.postId }).exec();
+  return deletedPost;
+};
+
 module.exports = {
   Query: { allPosts, postByUser },
   Mutation: {
     postCreate,
+    postUpdate,
+    postDelete,
   },
 };
