@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/authContext";
 import FileUpload from "../../components/FileUpload";
 import PostCard from "../../components/PostCard";
 
-import { POST_CREATE } from "../../graphql/mutations";
+import { POST_CREATE, POST_DELETE } from "../../graphql/mutations";
 import { POSTS_BY_USER } from "../../graphql/queries";
 
 const initialState = {
@@ -41,6 +41,29 @@ const Post = () => {
     },
     onError: (err) => console.log(err),
   });
+
+  const [postDelete] = useMutation(POST_DELETE, {
+    update: ({ data }) => {
+      console.log("post deleted", data);
+      toast.error("post deleted");
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error("post delete failed");
+    },
+  });
+
+  const handleDelete = async (postId) => {
+    let answer = window.confirm("Want to Delete?");
+    if (answer) {
+      setLoading(true);
+      postDelete({
+        variables: { postId },
+        refetchQueries: [{ query: POSTS_BY_USER }],
+      });
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,6 +128,7 @@ const Post = () => {
                 post={post}
                 showUpdateButton={true}
                 showDeleteButton={true}
+                handleDelete={handleDelete}
               ></PostCard>
             </div>
           ))}

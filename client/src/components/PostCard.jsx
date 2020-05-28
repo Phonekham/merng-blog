@@ -5,6 +5,7 @@ import Image from "./Image";
 
 const PostCard = ({
   post,
+  handleDelete = (f) => f,
   showDeleteButton = false,
   showUpdateButton = false,
 }) => {
@@ -19,7 +20,12 @@ const PostCard = ({
         <br />
         <br />
         {showDeleteButton && (
-          <button className="btn m-2 btn-danger">Delete</button>
+          <button
+            onClick={() => handleDelete(post._id)}
+            className="btn m-2 btn-danger"
+          >
+            Delete
+          </button>
         )}
         {showUpdateButton && (
           <button className="btn m-2 btn-warning">Update</button>
