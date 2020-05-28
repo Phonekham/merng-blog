@@ -19,6 +19,12 @@ const postByUser = async (parent, args, { req }) => {
     .sort({ createdAt: -1 });
 };
 
+const singlePost = async (parent, args, { req }) => {
+  return await Post.findById({ _id: args.postId })
+    .populate("postedBy", "_id username")
+    .exec();
+};
+
 // mutation
 const postCreate = async (parent, args, { req }) => {
   const currentUser = await authCheck(req);
@@ -71,7 +77,7 @@ const postDelete = async (parent, args, { req }) => {
 };
 
 module.exports = {
-  Query: { allPosts, postByUser },
+  Query: { allPosts, postByUser, singlePost },
   Mutation: {
     postCreate,
     postUpdate,

@@ -11,6 +11,7 @@ module.exports = gql`
   type Query {
     allPosts: [Post!]!
     postByUser: [Post!]!
+    singlePost(postId: String!): Post!
   }
   # input type
   input PostCreateInput {
