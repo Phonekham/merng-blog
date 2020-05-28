@@ -18,6 +18,7 @@ import Post from "./pages/post/Post";
 import PublicRoute from "./components/PublicRoute";
 import Users from "./pages/Users";
 import SingleUser from "./pages/SingleUser";
+import PostUpdate from "./pages/post/PostUpdate";
 
 const App = () => {
   const { state } = useContext(AuthContext);
@@ -57,6 +58,11 @@ const App = () => {
         />
         <PrivateRoute exact path="/profile" component={Profile} />
         <PrivateRoute exact path="/post/create" component={Post} />
+        <PrivateRoute
+          exact
+          path="/post/update/:postId"
+          component={PostUpdate}
+        />
         <Route exact path="/user/:username" component={SingleUser} />
       </Switch>
     </ApolloProvider>
