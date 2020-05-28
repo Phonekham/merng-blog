@@ -37,6 +37,15 @@ export const POSTS_BY_USER = gql`
   ${POST_DATA}
 `;
 
+export const GET_SINGLE_POST = gql`
+  query singlePost($postId: String!) {
+    singlePost(postId: $postId) {
+      ...postData
+    }
+  }
+  ${POST_DATA}
+`;
+
 // export const GET_ALL_USERS = gql`
 //   query publicProfile($username:String! ){
 //     publicProfile(username: $username) {
