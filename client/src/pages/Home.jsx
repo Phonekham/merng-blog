@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { AuthContext } from "../context/authContext";
 import { GET_ALL_POSTS, TOTAL_POSTS } from "../graphql/queries";
+import PostPagination from "../components/PostPagination";
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -16,21 +17,6 @@ const Home = () => {
   const { state, dispatch } = useContext(AuthContext);
 
   let history = useHistory();
-
-  let totalPages;
-  const pagination = () => {
-    totalPages = Math.ceil(postCount && postCount.totalPosts / 3);
-    // console.log(totalPages);
-    let pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <li onClick={() => setPage(i)}>
-          <a className={`page-link ${page === i && "activePagination"}`}>{i}</a>
-        </li>
-      );
-    }
-    return pages;
-  };
 
   if (loading) return <p className="p-5">Loading...</p>;
 
@@ -59,19 +45,11 @@ const Home = () => {
         Fetch Posts
       </button>
       <hr></hr>
-      <nav>
-        <ul className="pagination justify-content-center">
-          <li onClick={() => setPage(1)}>
-            <a className={`page-link ${page === 1 && "disabled"}`}>Previous</a>
-          </li>
-          {pagination()}
-          <li onClick={() => setPage(totalPages)}>
-            <a className={`page-link ${page === totalPages && "disabled"}`}>
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <PostPagination
+        page={page}
+        setPage={setPage}
+        postCount={postCount}
+      ></PostPagination>
       <hr></hr>
       {JSON.stringify(state.user)}
     </div>
