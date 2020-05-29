@@ -11,8 +11,8 @@ export const PROFILE = gql`
 `;
 
 export const GET_ALL_POSTS = gql`
-  {
-    allPosts {
+  query allPosts($page: Int) {
+    allPosts(page: $page) {
       ...postData
     }
   }
@@ -44,6 +44,12 @@ export const GET_SINGLE_POST = gql`
     }
   }
   ${POST_DATA}
+`;
+
+export const TOTAL_POSTS = gql`
+  query {
+    totalPosts
+  }
 `;
 
 // export const GET_ALL_USERS = gql`
