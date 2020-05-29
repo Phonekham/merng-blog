@@ -52,6 +52,14 @@ export const TOTAL_POSTS = gql`
   }
 `;
 
+export const SEARCH = gql`
+  query search($query: String!) {
+    search(query: $query) {
+      ...postData
+    }
+  }
+  ${POST_DATA}
+`;
 // export const GET_ALL_USERS = gql`
 //   query publicProfile($username:String! ){
 //     publicProfile(username: $username) {
