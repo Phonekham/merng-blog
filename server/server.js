@@ -1,5 +1,5 @@
 const express = require("express");
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer, PubSub } = require("apollo-server-express");
 const http = require("http");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -11,6 +11,8 @@ const {
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
+
+const pubsub = new PubSub();
 
 const { authCheckMiddleware } = require("./helpers/auth");
 
@@ -50,7 +52,7 @@ const resolvers = mergeResolvers(
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, res }) => ({ req, res }),
+  context: ({ req, pubsub }) => ({ req, pubsub }),
 });
 
 // applyMiddleware method connects ApolloServer to a specific HTTP framework ie: express
@@ -59,6 +61,7 @@ apolloServer.applyMiddleware({ app });
 
 // server
 const httpserver = http.createServer(app);
+apolloServer.installSubscriptionHandlers(httpserver);
 
 // Rest Endpoint
 
@@ -101,4 +104,5 @@ app.listen(process.env.PORT, () => {
   console.log(
     `graphql server is ready at http://localhost:${process.env.PORT}${apolloServer.graphqlPath}`
   );
+  console.log(`Subscription is ready at ${apolloServer.subscriptionsPath}`);
 });
