@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
 import { useHistory } from "react-router-dom";
 
 import { AuthContext } from "../context/authContext";
@@ -18,14 +17,15 @@ const Home = () => {
 
   let history = useHistory();
 
+  let totalPages;
   const pagination = () => {
-    const totalPages = Math.ceil(postCount && postCount.totalPosts / 3);
+    totalPages = Math.ceil(postCount && postCount.totalPosts / 3);
     // console.log(totalPages);
     let pages = [];
     for (let i = 1; i <= totalPages; i++) {
       pages.push(
         <li onClick={() => setPage(i)}>
-          <a className="page-link">{i}</a>
+          <a className={`page-link ${page === i && "activePagination"}`}>{i}</a>
         </li>
       );
     }
@@ -60,7 +60,17 @@ const Home = () => {
       </button>
       <hr></hr>
       <nav>
-        <ul className="pagination justify-content-center">{pagination()}</ul>
+        <ul className="pagination justify-content-center">
+          <li onClick={() => setPage(1)}>
+            <a className={`page-link ${page === 1 && "disabled"}`}>Previous</a>
+          </li>
+          {pagination()}
+          <li onClick={() => setPage(totalPages)}>
+            <a className={`page-link ${page === totalPages && "disabled"}`}>
+              Next
+            </a>
+          </li>
+        </ul>
       </nav>
       <hr></hr>
       {JSON.stringify(state.user)}
