@@ -4,7 +4,12 @@ const Post = require("../models/post");
 
 // queries
 const allPosts = async (parent, args, { req }) => {
+  const currentPage = args.page || 1;
+  const perPage = 3;
+
   return await Post.find({})
+    .skip((currentPage - 1) * perPage)
+    .limit(perPage)
     .populate("postedBy", "username _id")
     .sort({ createdAt: -1 })
     .exec();
