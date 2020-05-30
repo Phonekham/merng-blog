@@ -6,6 +6,7 @@ import { AuthContext } from "../context/authContext";
 import { GET_ALL_POSTS, TOTAL_POSTS } from "../graphql/queries";
 import PostPagination from "../components/PostPagination";
 import { gql } from "apollo-boost";
+import { toast } from "react-toastify";
 
 const POST_ADDED = gql`
   subscription {
@@ -14,6 +15,7 @@ const POST_ADDED = gql`
       content
       image {
         url
+        public_id
       }
       postedBy {
         username
@@ -29,7 +31,35 @@ const Home = () => {
   });
 
   const { data: postCount } = useQuery(TOTAL_POSTS);
-  const { data: newPost } = useSubscription(POST_ADDED);
+  // subscription
+  const { data: newPost } = useSubscription(POST_ADDED, {
+    onSubscriptionData: async ({
+      client: { cache },
+      subscriptionData: { data },
+    }) => {
+      const { allPosts } = cache.readQuery({
+        query: GET_ALL_POSTS,
+        variables: { page },
+      });
+      console.log(allPosts);
+
+      // write back to cache
+      cache.writeQuery({
+        query: GET_ALL_POSTS,
+        variables: { page },
+        data: {
+          allPosts: [data.postAdded, ...allPosts],
+        },
+      });
+      // refetch post to update ui
+      fetchPosts({
+        variables: { page },
+        refetchQueries: [{ query: GET_ALL_POSTS, variables: { page } }],
+      });
+      // show toast
+      toast.success("New Post Added");
+    },
+  });
   const [fetchPosts, { data: posts }] = useLazyQuery(GET_ALL_POSTS);
   const { state, dispatch } = useContext(AuthContext);
 
