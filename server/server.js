@@ -52,7 +52,7 @@ const resolvers = mergeResolvers(
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, pubsub }) => ({ req, pubsub }),
+  context: ({ req }) => ({ req, pubsub }),
 });
 
 // applyMiddleware method connects ApolloServer to a specific HTTP framework ie: express
@@ -99,7 +99,7 @@ app.post("/removeimage", authCheckMiddleware, (req, res) => {
   });
 });
 
-app.listen(process.env.PORT, () => {
+httpserver.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
   console.log(
     `graphql server is ready at http://localhost:${process.env.PORT}${apolloServer.graphqlPath}`

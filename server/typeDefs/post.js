@@ -8,6 +8,10 @@ module.exports = gql`
     postedBy: User
   }
 
+  type Subscription {
+    postAdded: Post
+  }
+  #Query
   type Query {
     totalPosts: Int!
     allPosts(page: Int): [Post!]!
@@ -15,6 +19,13 @@ module.exports = gql`
     singlePost(postId: String!): Post!
     search(query: String): [Post]
   }
+  # mutations
+  type Mutation {
+    postCreate(input: PostCreateInput!): Post!
+    postUpdate(input: PostUpdateInput!): Post!
+    postDelete(postId: String!): Post!
+  }
+
   # input type
   input PostCreateInput {
     content: String
@@ -24,11 +35,5 @@ module.exports = gql`
     _id: String!
     content: String
     image: ImageInput
-  }
-  # mutations
-  type Mutation {
-    postCreate(input: PostCreateInput!): Post!
-    postUpdate(input: PostUpdateInput!): Post!
-    postDelete(postId: String!): Post!
   }
 `;

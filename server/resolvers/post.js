@@ -2,6 +2,9 @@ const { authCheck } = require("../helpers/auth");
 const User = require("../models/user");
 const Post = require("../models/post");
 
+// Subscription
+const POST_ADDED = "POST_ADDED";
+
 // queries
 const allPosts = async (parent, args, { req }) => {
   const currentPage = args.page || 1;
@@ -41,7 +44,7 @@ const search = async (parent, args) => {
 };
 
 // mutation
-const postCreate = async (parent, args, { req }) => {
+const postCreate = async (parent, args, { req, pubsub }) => {
   const currentUser = await authCheck(req);
 
   // validate
@@ -56,6 +59,9 @@ const postCreate = async (parent, args, { req }) => {
   })
     .save()
     .then((post) => post.populate("postedBy", "_id username").execPopulate());
+
+  pubsub.publish(POST_ADDED, { postAdded: newPost });
+
   return newPost;
 };
 
@@ -99,5 +105,11 @@ module.exports = {
     postCreate,
     postUpdate,
     postDelete,
+  },
+  Subscription: {
+    postAdded: {
+      subscribe: (parent, args, { pubsub }) =>
+        pubsub.asyncIterator([POST_ADDED]),
+    },
   },
 };
