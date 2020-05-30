@@ -1,28 +1,12 @@
 import React, { useContext, useState } from "react";
 import { useQuery, useLazyQuery, useSubscription } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { AuthContext } from "../context/authContext";
 import { GET_ALL_POSTS, TOTAL_POSTS } from "../graphql/queries";
+import { POST_ADDED } from "../graphql/subscriptions";
 import PostPagination from "../components/PostPagination";
-import { gql } from "apollo-boost";
-import { toast } from "react-toastify";
-
-const POST_ADDED = gql`
-  subscription {
-    postAdded {
-      _id
-      content
-      image {
-        url
-        public_id
-      }
-      postedBy {
-        username
-      }
-    }
-  }
-`;
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -54,7 +38,7 @@ const Home = () => {
       // refetch post to update ui
       fetchPosts({
         variables: { page },
-        refetchQueries: [{ query: GET_ALL_POSTS, variables: { page } }],
+        refetchQueries: [{ query: GET_ALL_POSTS }],
       });
       // show toast
       toast.success("New Post Added");
