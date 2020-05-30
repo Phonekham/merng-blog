@@ -67,7 +67,7 @@ const postCreate = async (parent, args, { req, pubsub }) => {
   return newPost;
 };
 
-const postUpdate = async (parent, args, { req }) => {
+const postUpdate = async (parent, args, { req, pubsub }) => {
   const currentUser = await authCheck(req);
   // validation
   if (args.input.content.trim() === "") throw new Error("Content is required");
@@ -87,12 +87,12 @@ const postUpdate = async (parent, args, { req }) => {
     .exec()
     .then((post) => post.populate("postedBy", "_id username").execPopulate());
 
-  pubsub.publish(POST_UPDATED, { updatedPost });
+  pubsub.publish(POST_UPDATED, { postUpdated: updatedPost });
 
   return updatedPost;
 };
 
-const postDelete = async (parent, args, { req }) => {
+const postDelete = async (parent, args, { req, pubsub }) => {
   const currentUser = await authCheck(req);
   const currentUserFromDB = await User.findOne({
     email: currentUser.email,
@@ -102,7 +102,7 @@ const postDelete = async (parent, args, { req }) => {
     throw new Error("not authorized");
   const deletedPost = await Post.findByIdAndDelete({ _id: args.postId }).exec();
 
-  pubsub.publish(POST_UPDATED, { deletedPost });
+  pubsub.publish(POST_UPDATED, { postDeleted: deletedPost });
 
   return deletedPost;
 };

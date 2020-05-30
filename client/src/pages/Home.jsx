@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 
 import { AuthContext } from "../context/authContext";
 import { GET_ALL_POSTS, TOTAL_POSTS } from "../graphql/queries";
-import { POST_ADDED } from "../graphql/subscriptions";
+import {
+  POST_ADDED,
+  POST_UPDATED,
+  POST_DELETED,
+} from "../graphql/subscriptions";
 import PostPagination from "../components/PostPagination";
 
 const Home = () => {
@@ -44,6 +48,14 @@ const Home = () => {
       toast.success("New Post Added");
     },
   });
+
+  // update sucscription
+  const { data: updatedPost } = useSubscription(POST_UPDATED, {
+    onSubscriptionData: () => {
+      toast.success("Post Updated");
+    },
+  });
+
   const [fetchPosts, { data: posts }] = useLazyQuery(GET_ALL_POSTS);
   const { state, dispatch } = useContext(AuthContext);
 
