@@ -56,6 +56,40 @@ const Home = () => {
     },
   });
 
+  // delete subscription
+  const { data: deletedPost } = useSubscription(POST_DELETED, {
+    onSubscriptionData: async ({
+      client: { cache },
+      subscriptionData: { data },
+    }) => {
+      const { allPosts } = cache.readQuery({
+        query: GET_ALL_POSTS,
+        variables: { page },
+      });
+
+      let filteredPosts = allPosts.filter(
+        (p) => p._id !== data.postDeleted._id
+      );
+      console.log("filter", filteredPosts);
+
+      // write back to cache
+      cache.writeQuery({
+        query: GET_ALL_POSTS,
+        variables: { page },
+        data: {
+          allPosts: filteredPosts,
+        },
+      });
+      // refetch post to update ui
+      fetchPosts({
+        variables: { page },
+        refetchQueries: [{ query: GET_ALL_POSTS }],
+      });
+      // show toast
+      toast.success("post deleted");
+    },
+  });
+
   const [fetchPosts, { data: posts }] = useLazyQuery(GET_ALL_POSTS);
   const { state, dispatch } = useContext(AuthContext);
 
