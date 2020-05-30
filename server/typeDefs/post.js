@@ -10,6 +10,8 @@ module.exports = gql`
 
   type Subscription {
     postAdded: Post
+    postUpdated: Post
+    postDeleted: Post
   }
   #Query
   type Query {

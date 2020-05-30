@@ -4,6 +4,8 @@ const Post = require("../models/post");
 
 // Subscription
 const POST_ADDED = "POST_ADDED";
+const POST_UPDATED = "POST_UPDATED";
+const POST_DELETED = "POST_DELETED";
 
 // queries
 const allPosts = async (parent, args, { req }) => {
@@ -84,6 +86,9 @@ const postUpdate = async (parent, args, { req }) => {
   )
     .exec()
     .then((post) => post.populate("postedBy", "_id username").execPopulate());
+
+  pubsub.publish(POST_UPDATED, { updatedPost });
+
   return updatedPost;
 };
 
@@ -96,6 +101,9 @@ const postDelete = async (parent, args, { req }) => {
   if (currentUserFromDB._id.toString() !== postToDelete.postedBy._id.toString())
     throw new Error("not authorized");
   const deletedPost = await Post.findByIdAndDelete({ _id: args.postId }).exec();
+
+  pubsub.publish(POST_UPDATED, { deletedPost });
+
   return deletedPost;
 };
 
@@ -110,6 +118,14 @@ module.exports = {
     postAdded: {
       subscribe: (parent, args, { pubsub }) =>
         pubsub.asyncIterator([POST_ADDED]),
+    },
+    postUpdated: {
+      subscribe: (parent, args, { pubsub }) =>
+        pubsub.asyncIterator([POST_UPDATED]),
+    },
+    postDeleted: {
+      subscribe: (parent, args, { pubsub }) =>
+        pubsub.asyncIterator([POST_DELETED]),
     },
   },
 };
