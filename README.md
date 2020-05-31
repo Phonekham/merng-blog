@@ -2,8 +2,6 @@
 
 Built on MERN stack with GraphQL.
 
-## Installation
-
 ## Features
 
 ### MVP
@@ -54,24 +52,21 @@ Built on MERN stack with GraphQL.
 
 - cloudinary
 
-
-
-
 ### Front-End
 
 - React 16+
 
 "apollo-boost": "^0.4.9",
-    - "apollo-link": "^1.2.14",
-    - "apollo-link-context": "^1.0.20",
-    - "apollo-link-ws": "^1.0.20",
-    - "apollo-utilities": "^1.3.4",
-    - "axios": "^0.19.2",
-    - "firebase": "^7.14.4",
-    - "graphql": "^15.0.0",
-    - "omit-deep": "^0.3.0",
-    - "react-image-file-resizer": "^0.2.3",
-    - "react-router-dom": "^5.2.0",
-    - "react-scripts": "3.4.1",
-    - "react-toastify": "^6.0.4",
-    - "subscriptions-transport-ws": "^0.9.16"
+- "apollo-link": "^1.2.14",
+- "apollo-link-context": "^1.0.20",
+- "apollo-link-ws": "^1.0.20",
+- "apollo-utilities": "^1.3.4",
+- "axios": "^0.19.2",
+- "firebase": "^7.14.4",
+- "graphql": "^15.0.0",
+- "omit-deep": "^0.3.0",
+- "react-image-file-resizer": "^0.2.3",
+- "react-router-dom": "^5.2.0",
+- "react-scripts": "3.4.1",
+- "react-toastify": "^6.0.4",
+- "subscriptions-transport-ws": "^0.9.16"
